@@ -1,11 +1,11 @@
 package code;
 
 public class Complaint {
-    String user;
+    long int complaintID;
+    Credentials user;
     String description;
     Media media;
     int threatLevel;
-    int credibility;
     public Complaint()
     {
         media=new Media();
