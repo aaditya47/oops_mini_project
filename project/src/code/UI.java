@@ -2,6 +2,7 @@ package code;
 import java.util.*;
 
 import javax.lang.model.util.ElementScanner6;
+
 public class UI {
 	Credentials credentials;
 	String sessionID;
@@ -10,7 +11,69 @@ public class UI {
 	{
 		s=new Scanner(System.in);
 		// TODO - Write code to assign random session ID and display it
-		openLoginPage();
+		menu1();
+	}
+	public void menu1()
+	{
+		while(true)
+		{
+			System.out.println("Enter 1 if you would like to login to an existing account. Alternatively, enter 2 if you would like to sign up");
+			int opt=s.nextInt();
+			if(opt==1)
+			{
+				openLoginPage();
+				break;
+			}
+			else if(opt==2)
+			{
+				signUp();
+			}
+			else
+			{
+				System.out.println("Invalid option. Enter a valid option to continue")
+			}
+		}
+	}
+	public void menu2()
+	{
+		while(true)
+		{
+			System.out.println("Is there anything else we can help you out with? Type 1 if yes or any other number if no");
+			int opt=s.nextInt();
+			if(opt==1)
+			{
+				System.out.println("Type 1 if you want to view the status of a previous complaint, Type 2 if you want to change your password, Type 3 if you want to exit");
+				opt=s.nextInt();
+				switch(opt)
+				{
+					case 1:
+						System.out.println("Enter the complaint ID you were issued with: ");
+						long int id=s.nextInt();
+						int count;
+						for(int i=0;i<ThreatClassifier.lastIndex;++i)
+						{
+							if(ThreatClassifier.complaintList[i].complaintID==id)
+							{
+								System.out.println("Your complaint with ID "+id" is in position "+(i+1)+" and will be taken care of shortly. Please wait");
+							}
+						}
+						break;
+					case 2:
+						System.out.println("Enter your username: ");
+						String username=s.next();
+						System.out.println("Enter your Aadhaar number: ");
+						String aadhaar=s.next();
+						if()
+					
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+
 	}
 	public void openLoginPage()
 	{
@@ -19,26 +82,38 @@ public class UI {
 		{
 			System.out.println("Enter username: ");
 			String username=s.next();
-			System.out.println("Enter password: ");
-			String password=s.next();
-			// TODO - Write code to check username and password
-			if(/*passwords match*/)
+			System.out.println("Enter Aadhaar: ");
+			String aadhaar=s.next();
+			System.out.println("Checking username and Aadhaar. Please wait");
+			if(CredentialsDatabase.checkAadhaar(username, aadhaar)==true)
 			{
-				System.out.println("Successfully logged in!");
-				credentials.username=username;
-				credentials.password=password;
-				break;
+				System.out.println("Enter password: ");
+				String password=s.next();
+				System.out.println("Checking validity. Please wait. This might take a while...")
+				if(CredentialsDatabase.checkPassword(username, password)==true)
+				{
+					System.out.println("Successfully logged in!");
+					credentials.username=username;
+					credentials.password=password;
+					menu2();
+					break;
+				}
+				else
+				{
+					System.out.println("Invalid credentials. Please try again.");
+				}
 			}
 			else
 			{
-				System.out.println("Invalid credentials. Please try again.");
+				System.out.println("Username and Aadhaar don't match! Please try again");
 			}
+			
 		}
 	}
-	public void signUp(Credentials newCredentials)
+	public void signUp()
 	{
 		// TODO - write code to insert new credentials into database
-		System.out.println("Successfully signed up! Login username: "+newCredentials.username);
+		System.out.println("Successfully signed up! Please login to continue");
 	}
 	public void registerComplaint()
 	{
@@ -47,7 +122,7 @@ public class UI {
 		int threatLevel;
 		int credibility;
 		Complaint c=new Complaint();
-		c.user=this.credentials.username;
+		c=this.credentials;
 		System.out.println("Enter description of your complaint: ");
 		description=s.next();
 		System.out.println("Do you wish to add any media? Type 1 if yes, or any other number if no");
@@ -59,17 +134,20 @@ public class UI {
 			if(opt==1)
 			{
 				c.media.form=1;
-				// TODO - write code to import media
+				c.media.attachment="Picture..."
+				System.out.println("Picture successfully imported. Our authorities will contact you shortly");
 			}
 			else if(opt==2)
 			{
 				c.media.form=2;
-				// TODO - write code to import media
+				c.media.attachment="Video..."
+				System.out.println("Video successfully imported. Our authorities will contact you shortly");
 			}
 			else if(opt==3)
 			{
-				c.media.form=1;
-				// TODO - write code to import media
+				c.media.form=3;
+				c.media.attachment="Location..."
+				System.out.println("Location successfully shared. Our authorities will contact you shortly");
 			}
 		}
 		else
@@ -77,13 +155,9 @@ public class UI {
 			continue;
 		}
 		c.description=description;
-		// TODO - write code to access database and retrieve credibility level
 		ThreatClassifier.insert(c); // Static method
-		System.out.println("Thank you for submitting your complaint. We will get back to you soon");
-	}
-	public void displayMessage(String msg)
-	{
-		System.out.println(msg);
+		int n=new Random().nextInt();
+		System.out.println("Thank you for submitting your complaint. We will get back to you soon. Your complaint ID is "+n);
 	}
 	public String toString()
 	{
