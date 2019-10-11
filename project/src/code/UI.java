@@ -1,8 +1,6 @@
 package code;
 import java.util.*;
 
-import javax.lang.model.util.ElementScanner6;
-
 public class UI {
 	Credentials credentials;
 	String sessionID;
@@ -59,12 +57,44 @@ public class UI {
 						}
 						break;
 					case 2:
-						System.out.println("Enter your username: ");
-						String username=s.next();
-						System.out.println("Enter your Aadhaar number: ");
-						String aadhaar=s.next();
-						if()
-					
+						while(true)
+						{
+							System.out.println("Enter your username: ");
+							String username=s.next();
+							System.out.println("Enter your Aadhaar number: ");
+							String aadhaar=s.next();
+							if(CredentialsDatabase.checkAadhaar(username, aadhaar)==True)
+							{
+								System.out.println("Username and Aadhaar match.");
+								while(true)
+								{
+									System.out.println("Please enter your new password: ");
+									String password=s.next();
+									System.out.println("Enter your password again");
+									if(s.next().equals(password))
+									{
+										CredentialsDatabase.changePassword(username, password);
+										System.out.println("Password changed successfully!");
+										break;
+									}
+									else 
+									{
+										System.out.println("Passwords don't match. Please try again");
+									}
+								}
+							}
+							else
+							{
+								System.out.println("Username does not match Aadhaar registered. Please try again");
+							}
+						}
+						break;
+					case 3:
+						System.out.println("Thank you for using our app!");
+						break;
+					default:
+						System.out.println("Wrong option! Please try again");
+						break;
 				}
 			}
 			else
@@ -72,8 +102,6 @@ public class UI {
 				break;
 			}
 		}
-		
-
 	}
 	public void openLoginPage()
 	{
@@ -134,18 +162,21 @@ public class UI {
 			if(opt==1)
 			{
 				c.media.form=1;
+				c.threatLevel=1;
 				c.media.attachment="Picture..."
 				System.out.println("Picture successfully imported. Our authorities will contact you shortly");
 			}
 			else if(opt==2)
 			{
 				c.media.form=2;
+				c.threatLevel=2;
 				c.media.attachment="Video..."
 				System.out.println("Video successfully imported. Our authorities will contact you shortly");
 			}
 			else if(opt==3)
 			{
 				c.media.form=3;
+				c.threatLevel=3;
 				c.media.attachment="Location..."
 				System.out.println("Location successfully shared. Our authorities will contact you shortly");
 			}
@@ -155,7 +186,7 @@ public class UI {
 			continue;
 		}
 		c.description=description;
-		ThreatClassifier.insert(c); // Static method
+		ThreatClassifier.insert(c);
 		int n=new Random().nextInt();
 		System.out.println("Thank you for submitting your complaint. We will get back to you soon. Your complaint ID is "+n);
 	}

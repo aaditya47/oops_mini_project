@@ -12,7 +12,7 @@ public class ThreatClassifier {
         }
         lastIndex=0;
     }
-    public void classify(long int complaintID)
+    public static void classify(long int complaintID)
     {
         for(int i=0;i<1000;++i)
         {
@@ -23,13 +23,13 @@ public class ThreatClassifier {
             }
         }
     }
-    public void classify(Credentials c,int index)
+    public static void classify(Credentials c,int index)
     {
         for(int i=0;i<1000;++i)
         {
             for(int j=i+1;j<1000;++j)
             {
-                if((0.35*(CredentialsDatabase.getCrediblity(complaintList[i]))+0.65*complaintList[i].threatLevel)<(0.35*(CredentialsDatabase.getCrediblity(complaintList[j]))+0.65*(complaintList[j].threatLevel)))
+                if((0.35*(CredentialsDatabase.getCrediblity(complaintList[i].user))+0.65*complaintList[i].threatLevel)<(0.35*(CredentialsDatabase.getCrediblity(complaintList[j].user))+0.65*(complaintList[j].threatLevel)))
                 {
                     Object temp=complaintList[i];
                     complaintList[i]=complaintList[j];
